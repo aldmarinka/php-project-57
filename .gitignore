@@ -4,3 +4,4 @@
 /logs
 /demo.cast
 .env
+/node_modules

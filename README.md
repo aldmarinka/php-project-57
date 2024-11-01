@@ -3,3 +3,6 @@
 
 ### ProjectActions:
 [![Actions Status](https://github.com/aldmarinka/php-project-57/actions/workflows/php.yml/badge.svg)](https://github.com/aldmarinka/php-project-57/actions)
+
+### Code Climate
+[![Maintainability](https://api.codeclimate.com/v1/badges/b8a11545e4fc41d65433/maintainability)](https://codeclimate.com/github/aldmarinka/php-project-9/maintainability)
