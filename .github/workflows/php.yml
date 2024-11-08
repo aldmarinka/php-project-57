@@ -29,6 +29,12 @@ jobs:
     - name: run linter
       run: make lint
 
+    - name: setup
+      run: make setup
+
+    - name: run tests
+      run: php ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
     - name: Upload Coverage to Code Climate
       uses: paambaati/codeclimate-action@v5
       env:
