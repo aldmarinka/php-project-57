@@ -8,8 +8,6 @@ use Tests\TestCase;
 
 class ProfileTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_profile_page_is_displayed(): void
     {
         $user = User::factory()->create();
@@ -29,7 +27,7 @@ class ProfileTest extends TestCase
             ->actingAs($user)
             ->patch('/profile', [
                 'name' => 'Test User',
-                'email' => 'test@example.com',
+                'email' => 'testregistration@example.com',
             ]);
 
         $response
@@ -39,7 +37,7 @@ class ProfileTest extends TestCase
         $user->refresh();
 
         $this->assertSame('Test User', $user->name);
-        $this->assertSame('test@example.com', $user->email);
+        $this->assertSame('testregistration@example.com', $user->email);
         $this->assertNull($user->email_verified_at);
     }
 
