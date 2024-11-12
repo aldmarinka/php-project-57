@@ -32,7 +32,7 @@
                 <a href="{{ url('/') }}" class="block py-2 pl-3 pr-4 text-gray-700 hover:text-blue-700 lg:p-0">Задачи</a>
             </li>
             <li>
-                <a href="{{ url('/') }}" class="block py-2 pl-3 pr-4 text-gray-700 hover:text-blue-700 lg:p-0">Статусы</a>
+                <a href="{{ url('/task_statuses') }}" class="block py-2 pl-3 pr-4 text-gray-700 hover:text-blue-700 lg:p-0">Статусы</a>
             </li>
             <li>
                 <a href="{{ url('/') }}" class="block py-2 pl-3 pr-4 text-gray-700 hover:text-blue-700 lg:p-0">Метки</a>

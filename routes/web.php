@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskStatusController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,3 +19,11 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Публичные маршруты
+Route::get('task_statuses', [TaskStatusController::class, 'index'])->name('task_statuses.index'); // Публичный просмотр статусов
+
+// Только для авторизованных
+Route::middleware('auth')->group(function () {
+    Route::resource('task_statuses', TaskStatusController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
+});
