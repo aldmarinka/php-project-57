@@ -3,6 +3,18 @@
 @section('content')
     <div class="grid max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 lg:pt-28">
         <div class="grid col-span-full">
+
+            @if(session('success'))
+                <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <h2 class="mb-5">
                 Просмотр задачи: {{ $task->name }}
                 <a href="{{ route('tasks.edit', $task->id) }}">&#9881;</a>

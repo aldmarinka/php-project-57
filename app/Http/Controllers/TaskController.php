@@ -50,9 +50,7 @@ class TaskController extends Controller
 
         Task::create($validatedData);
 
-        flash(__('Задача успешно создана'))->success();
-
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index')->with('success', 'Задача успешно создана');
     }
 
     /**
@@ -79,9 +77,7 @@ class TaskController extends Controller
 
         $task->update($validatedData);
 
-        flash(__('Задача успешно изменена'))->success();
-
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index')->with('success', 'Задача успешно изменена');
     }
 
     /**
@@ -93,9 +89,7 @@ class TaskController extends Controller
     {
         $task->delete();
 
-        flash(__('Задача успешно удалена'))->success();
-
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index')->with('success', 'Задача успешно удалена');
     }
 
     /**

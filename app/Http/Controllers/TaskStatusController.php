@@ -39,8 +39,7 @@ class TaskStatusController extends Controller
     {
         $taskStatus = new TaskStatus();
         $this->saveTaskStatus($taskStatus, $request);
-        flash(__('Статус успешно создан'))->success();
-        return redirect()->route('task_statuses.index');
+        return redirect()->route('task_statuses.index')->with('success', 'Статус успешно создан');
     }
 
     /**
@@ -62,8 +61,7 @@ class TaskStatusController extends Controller
     public function update(Request $request, TaskStatus $taskStatus): RedirectResponse
     {
         $this->saveTaskStatus($taskStatus, $request);
-        flash(__('Статус успешно изменён'))->success();
-        return redirect()->route('task_statuses.index');
+        return redirect()->route('task_statuses.index')->with('success', 'Статус успешно изменён');
     }
 
     /**
@@ -80,12 +78,11 @@ class TaskStatusController extends Controller
             }
 
             $taskStatus->delete();
-
-            flash(__('Статус успешно удалён'))->success();
         } catch (\Exception $e) {
-            flash(__('Не удалось удалить статус'))->error();
+            return redirect()->route('task_statuses.index')
+                             ->with('error', 'Не удалось удалить статус');
         }
-        return redirect()->route('task_statuses.index');
+        return redirect()->route('task_statuses.index')->with('success', 'Статус успешно удалён');
     }
 
     /**
