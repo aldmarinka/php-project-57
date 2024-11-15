@@ -3,23 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\TaskStatus;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class TaskStatusController extends Controller
 {
-    public function index()
+    /**
+     * @return Factory|View|Application
+     */
+    public function index(): Application|View|Factory
     {
         $taskStatuses = TaskStatus::orderBy('id')->paginate();
         return view('task_statuses.index', compact('taskStatuses'));
     }
 
-    public function create()
+    /**
+     * @return Factory|View|Application
+     */
+    public function create(): Application|View|Factory
     {
         $taskStatus = new TaskStatus();
         return view('task_statuses.create', compact('taskStatus'));
     }
 
-    public function store(Request $request)
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
     {
         $taskStatus = new TaskStatus();
         $this->saveTaskStatus($taskStatus, $request);
@@ -27,22 +43,44 @@ class TaskStatusController extends Controller
         return redirect()->route('task_statuses.index');
     }
 
-    public function edit(TaskStatus $taskStatus)
+    /**
+     * @param TaskStatus $taskStatus
+     *
+     * @return Factory|View|Application
+     */
+    public function edit(TaskStatus $taskStatus): Application|View|Factory
     {
         return view('task_statuses.edit', compact('taskStatus'));
     }
 
-    public function update(Request $request, TaskStatus $taskStatus)
+    /**
+     * @param Request    $request
+     * @param TaskStatus $taskStatus
+     *
+     * @return RedirectResponse
+     */
+    public function update(Request $request, TaskStatus $taskStatus): RedirectResponse
     {
         $this->saveTaskStatus($taskStatus, $request);
         flash(__('Статус успешно изменён'))->success();
         return redirect()->route('task_statuses.index');
     }
 
-    public function destroy(TaskStatus $taskStatus)
+    /**
+     * @param TaskStatus $taskStatus
+     *
+     * @return RedirectResponse
+     */
+    public function destroy(TaskStatus $taskStatus): RedirectResponse
     {
         try {
+            if ($taskStatus->tasks()->count() > 0) {
+                return redirect()->route('task_statuses.index')
+                                 ->with('error', 'Невозможно удалить статус, связанный с задачей');
+            }
+
             $taskStatus->delete();
+
             flash(__('Статус успешно удалён'))->success();
         } catch (\Exception $e) {
             flash(__('Не удалось удалить статус'))->error();
@@ -50,7 +88,13 @@ class TaskStatusController extends Controller
         return redirect()->route('task_statuses.index');
     }
 
-    private function saveTaskStatus(TaskStatus $taskStatus, Request $request)
+    /**
+     * @param TaskStatus $taskStatus
+     * @param Request    $request
+     *
+     * @return void
+     */
+    private function saveTaskStatus(TaskStatus $taskStatus, Request $request): void
     {
         $validated = $request->validate([
                                             'name' => 'required|min:1|max:255|unique:task_statuses',
