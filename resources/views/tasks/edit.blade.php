@@ -5,6 +5,17 @@
         <div class="grid col-span-full">
             <h2 class="mb-5">Изменение задачи</h2>
 
+            @if(session('success'))
+                <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <form class="w-50"  action="{{ route('tasks.update', $task->id) }}" method="POST">
                 @csrf
                 @method('PUT')
@@ -36,7 +47,7 @@
                     <div>
                         <select class="rounded border-gray-300 w-1/3" name="status_id" id="status_id">
                             @foreach ($taskStatuses as $status)
-                                <option value="{{ $status->id }}" @if($task->status_id == $status->id) selected @endif>
+                                <option value="{{ $status->id }}" @if($task->status_id == $status->id) selected @endif >
                                     {{ $status->name }}
                                 </option>
                             @endforeach
@@ -47,7 +58,7 @@
                     @enderror
 
                     <div class="mt-2">
-                        <label for="status_id">Исполнитель</label>
+                        <label for="assigned_to_id">Исполнитель</label>
                     </div>
                     <div>
                         <select class="rounded border-gray-300 w-1/3" name="assigned_to_id" id="assigned_to_id">
@@ -62,12 +73,18 @@
                     <div class="text-rose-600">{{ $message }}</div>
                     @enderror
 
-{{--                    <div class="mt-2">--}}
-{{--                        <label for="status_id">Метки</label>--}}
-{{--                    </div>--}}
-{{--                    <div>--}}
-{{--                        <select class="rounded border-gray-300 w-1/3 h-32" name="labels[]" id="labels[]" multiple><option value="1">ошибка</option><option value="2">документация</option><option value="3" selected="selected">дубликат</option><option value="4">доработка</option></select>--}}
-{{--                    </div>--}}
+                    <div class="mt-2">
+                        <label for="status_id">Метки</label>
+                    </div>
+                    <div>
+                        <select class="rounded border-gray-300 w-1/3 h-32" name="labels[]" id="labels[]" multiple>
+                            @foreach ($labels as $label)
+                                <option value="{{ $label->id }}" @if($task->labels->contains($label->id)) selected @endif>
+                                    {{ $label->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     <div class="mt-2">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Обновить</button>

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -35,7 +35,8 @@ class TaskController extends Controller
     {
         $taskStatuses = TaskStatus::all();
         $users = User::all();
-        return view('tasks.create', compact('taskStatuses', 'users'));
+        $labels = Label::all();
+        return view('tasks.create', compact('taskStatuses', 'users', 'labels'));
     }
 
     /**
@@ -48,7 +49,11 @@ class TaskController extends Controller
         $validatedData = $this->getValidatedData($request);
         $validatedData['created_by_id'] = auth()->id();
 
-        Task::create($validatedData);
+        $task = Task::create($validatedData);
+
+        if ($request->has('labels')) {
+            $task->labels()->sync($request->labels);
+        }
 
         return redirect()->route('tasks.index')->with('success', 'Задача успешно создана');
     }
@@ -62,7 +67,8 @@ class TaskController extends Controller
     {
         $taskStatuses = TaskStatus::all();
         $users = User::all();
-        return view('tasks.edit', compact('task', 'taskStatuses', 'users'));
+        $labels = Label::all();
+        return view('tasks.edit', compact('task', 'taskStatuses', 'users', 'labels'));
     }
 
     /**
@@ -76,6 +82,10 @@ class TaskController extends Controller
         $validatedData = $this->getValidatedData($request);
 
         $task->update($validatedData);
+
+        if ($request->has('labels')) {
+            $task->labels()->sync($request->labels);
+        }
 
         return redirect()->route('tasks.index')->with('success', 'Задача успешно изменена');
     }
@@ -99,7 +109,7 @@ class TaskController extends Controller
      */
     public function show(string $id): Application|View|Factory
     {
-        $task = Task::findOrFail((int)$id);
+        $task = Task::with('labels')->findOrFail($id);
         return view('tasks.show', compact('task'));
     }
 

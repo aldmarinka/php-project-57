@@ -61,7 +61,7 @@
                     @enderror
 
                     <div class="mt-2">
-                        <label for="status_id">Исполнитель</label>
+                        <label for="assigned_to_id">Исполнитель</label>
                     </div>
                     <div>
                         <select class="rounded border-gray-300 w-1/3" name="assigned_to_id" id="assigned_to_id">
@@ -76,12 +76,19 @@
                     <div class="text-rose-600">{{ $message }}</div>
                     @enderror
 
-{{--                    <div class="mt-2">--}}
-{{--                        <label for="status_id">Метки</label>--}}
-{{--                    </div>--}}
-{{--                    <div>--}}
-{{--                        <select class="rounded border-gray-300 w-1/3 h-32" name="labels[]" id="labels[]" multiple><option value="1">ошибка</option><option value="2">документация</option><option value="3">дубликат</option><option value="4">доработка</option></select>--}}
-{{--                    </div>--}}
+                    <div class="mt-2">
+                        <label for="status_id">Метки</label>
+                    </div>
+                    <div>
+                        <select class="rounded border-gray-300 w-1/3 h-32" name="labels[]" id="labels[]" multiple>
+                            @foreach ($labels as $label)
+                                <option value="{{ $label->id }}" {{ in_array($label->id, old('labels', [])) ? 'selected' : '' }}>
+                                    {{ $label->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="mt-2">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Создать</button>
                     </div>

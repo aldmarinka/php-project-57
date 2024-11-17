@@ -5,12 +5,23 @@
         <div class="grid col-span-full">
             <h1 class="mb-5">Создать статус</h1>
 
+            @if(session('success'))
+                <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <form action="{{ route('task_statuses.store') }}" class="w-50"  method="POST">
                 @csrf
                 <div class="mb-4">
                     <label for="name">Имя</label>
                     <div class="mt-2">
-                        <input type="text" name="name" id="name" class="rounded border-gray-300 w-1/3" >
+                        <input type="text" name="name" id="name" class="rounded border-gray-300 w-1/3" value="{{ old('name') }}">
                     </div>
                     @error('name')
                     <div class="text-rose-600">{{ $message }}</div>
