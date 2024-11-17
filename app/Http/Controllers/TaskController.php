@@ -11,6 +11,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
@@ -21,7 +23,16 @@ class TaskController extends Controller
      */
     public function index(Request $request): Application|View|Factory
     {
-        $tasks = Task::orderBy('id')->paginate();
+        $tasks = QueryBuilder::for(Task::class)
+                             ->allowedFilters([
+                                                  AllowedFilter::exact('status_id'),
+                                                  AllowedFilter::exact('created_by_id'),
+                                                  AllowedFilter::exact('assigned_to_id'),
+                                                  AllowedFilter::scope('label'),
+                                              ])
+                             ->with(['labels', 'status', 'creator', 'assignee'])
+                             ->paginate();
+
         $taskStatuses = TaskStatus::pluck('name', 'id');
         $users = User::pluck('name', 'id');
 
