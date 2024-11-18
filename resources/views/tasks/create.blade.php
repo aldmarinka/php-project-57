@@ -49,6 +49,7 @@
                     </div>
                     <div>
                         <select class="rounded border-gray-300 w-1/3" name="status_id" id="status_id">
+                            <option value selected="selected"></option>
                             @foreach ($taskStatuses as $status)
                                 <option value="{{ $status->id }}" {{ old('status_id') == $status->id ? 'selected' : '' }}>
                                     {{ $status->name }}
@@ -65,6 +66,7 @@
                     </div>
                     <div>
                         <select class="rounded border-gray-300 w-1/3" name="assigned_to_id" id="assigned_to_id">
+                            <option value selected="selected"></option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}" {{ old('assigned_to_id') == $user->id ? 'selected' : '' }}>
                                     {{ $user->name }}
