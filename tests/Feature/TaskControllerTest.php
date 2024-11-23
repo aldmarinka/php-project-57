@@ -60,7 +60,7 @@ class TaskControllerTest extends TestCase
     ]
     public function testShow(): void
     {
-        $response = $this->get(route('tasks.show', ['task' => $this->task]));
+        $response = $this->get(route('tasks.show', ['id' => $this->task->id]));
         $response->assertOk();
     }
 
